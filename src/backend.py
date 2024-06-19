@@ -5,8 +5,9 @@ import cv2
 
 app = Flask(__name__)
 
-model_cnn = load_model('pesos.h5')
-model_linear = load_model('pesos_linear.h5')
+# Carregando os modelos
+model_cnn = load_model('./modelos/pesos.h5')
+model_linear = load_model('./modelos/pesos_linear.h5')
 
 def prepare_image(image, target_size=(28, 28)):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -18,21 +19,31 @@ def prepare_image(image, target_size=(28, 28)):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return "No file found"
+    if 'file' not in request.files or 'model_type' not in request.form:
+        return jsonify({'error': 'No file or model type found'})
+    
     file = request.files['file']
+    model_type = request.form['model_type']
+    
     if file.filename == '':
-        return "No file selected"
+        return jsonify({'error': 'No file selected'})
+    
     image = np.frombuffer(file.read(), np.uint8)
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     image = prepare_image(image)
     
-    pred_cnn = model_cnn.predict(image)
-    pred_linear = model_linear.predict(image)
+    if model_type == 'cnn':
+        prediction = model_cnn.predict(image)
+        model_used = 'CNN'
+    elif model_type == 'linear':
+        prediction = model_linear.predict(image)
+        model_used = 'Linear'
+    else:
+        return jsonify({'error': 'Invalid model type'})
     
     response = {
-        'cnn_prediction': int(np.argmax(pred_cnn)),
-        'linear_prediction': int(np.argmax(pred_linear))
+        'model_used': model_used,
+        'prediction': int(np.argmax(prediction))
     }
     return jsonify(response)
 
