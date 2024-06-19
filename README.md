@@ -53,3 +53,4 @@ A imagem abaixo mostra as métricas de desempenho obtidas:
 Você pode assistir a uma demonstração do projeto no vídeo a seguir:
 
 ![Demo](./data/demo.webm)
+obs: o Github simboliza que o vídeo é grande demais pra ser visualizado pelo repositório, então clicando em view raw é possível realizar o download. Também upei no [youtube](https://youtu.be/6KBLDthlPtY) para facilitar a visualização.
