@@ -1,5 +1,5 @@
 # PONDERADA-MNIST
-
+Este é um projeto que aplica redes neurais convolucionais para detectar algarismos escritos a mão utilizando a base de dados "MNIST".
 ## Instruções
 
 Para rodar o projeto, siga os seguintes passos:
