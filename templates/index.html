@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super detector de imagens</title>
+    <script>
+        function uploadImage(event) {
+            event.preventDefault();
+            var formData = new FormData();
+            var fileInput = document.getElementById('file');
+            formData.append('file', fileInput.files[0]);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('cnn_prediction').innerText = 'Predição Modelo CNN: ' + data.cnn_prediction;
+                document.getElementById('linear_prediction').innerText = 'Predição Modelo Linear: ' + data.linear_prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Va meu fi faça o upload de uma imagem vá</h1>
+    <form onsubmit="uploadImage(event)">
+        <input type="file" id="file" name="file">
+        <input type="submit" value="Predict">
+    </form>
+    <h2 id="cnn_prediction"></h2>
+    <h2 id="linear_prediction"></h2>
+</body>
+</html>
